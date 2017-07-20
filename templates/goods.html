@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表</title>
+    <link href="/static/css/tables.css" type="text/css" media="screen" rel="stylesheet" />
+    <link href="/static/css/top.css" type="text/css" media="screen" rel="stylesheet" />
+    <script type="text/javascript">
+        function clicked()
+        {
+            {% if request.user.is_authenticated and request.user.activation %}
+                       return confirm('确认购买?');
+            {% elif request.user.is_authenticated %}
+                       return confirm('确认重发验证邮件?');
+            {% endif %}
+        }
+        function button_clicked()
+        {
+            alert("请前往注册邮箱激活账号！");
+
+        }
+        function button_clicked2()
+        {
+            alert("请先登录！");
+            window.location.href = '/login/';
+        }
+    </script>
+</head>
+<body>
+    <form id="form1" method="post" action={% url 'goods' %} onsubmit="return clicked()">
+    <div id="top-nav" class="navbar navbar-fixed-top navbar-inverse">
+        <ul class="nav navbar-nav" style="float:left; margin-left: auto">
+            <li class="dropdown">
+                    {% if request.user.is_authenticated and request.user.activation %}
+                        <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="">
+                        <strong>欢迎， {{ request.user.username }}</strong></a>
+                    {% elif request.user.is_authenticated %}
+                        <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="">
+                        <strong>欢迎， {{ request.user.username }}（未验证）</strong></a>
+                    {% else %}
+                        <a href="/login/"><span class="hide-sm">登录</span></a></ul>
+                        <ul class="nav navbar-nav" style="float:left; margin-left: auto">
+                        <li class="dropdown"><a href="/register/"><span class="hide-sm">注册</span></a>
+                    {% endif %}
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" style="float:left; margin-left: auto">
+            <li class="dropdown" style="margin-top: 8%; margin-left: 5%">
+                    {% if request.user.is_authenticated and not request.user.activation %}
+                        <input id="remail" name="remail" type="submit" value="重发验证邮件">
+                    {% endif %}
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" style="float:right; margin-right: auto">
+            <li class="dropdown">
+                {% if request.user.is_authenticated%}
+                <a href="/logout/">
+                    <i class="show-sm fa fa-sign-out"></i>
+                    <span class="hide-sm">注销</span>
+                </a>
+                {% endif %}
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" style="float:right; margin-right: auto">
+            <li class="dropdown">
+                {% if request.user.is_authenticated%}
+                <a href="/home/">
+                    <i class="show-sm fa fa-sign-out"></i>
+                    <span class="hide-sm">个人主页</span>
+                </a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    <div id="top-nav" class="navbar navbar-fixed-top">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                    <strong style='font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace; font-size: larger; margin-left: 45%'>商品信息</strong>
+            </li>
+            <br>
+        </ul>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <td  class="sortable" scope="col">
+                    <div>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">商品名</a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="?o=id" class="active"><i class="fa fa-caret-up"></i> 正序</a></li>
+                            <li><a href="?o=-id" class="active"><i class="fa fa-caret-down"></i> 倒序</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td  class="sortable" scope="col">
+                    <div>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">单价</a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="?o=id" class="active"><i class="fa fa-caret-up"></i> 正序</a></li>
+                            <li><a href="?o=-id" class="active"><i class="fa fa-caret-down"></i> 倒序</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td  class="sortable" scope="col">
+                    <div>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">购买</a>
+                    </div>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for goods in goods_items %}
+            <tr>
+                <td> {{ goods.name }} </td>
+                <td> {{ goods.price }} </td>
+                <td>
+                    <script type="text/javascript">
+                    {% if request.user.is_authenticated and request.user.activation %}
+                        document.write('<input id="buy" name="'+String({{ goods.id }})+'" type="submit" value="购买">');
+                    {% elif not request.user.is_authenticated %}
+                        document.write('<input id="buy" name="'+String({{ goods.id }})+'" type="button" value="购买" onclick="button_clicked2()">');
+                    {% else %}
+                        document.write('<input id="buy" name="'+String({{ goods.id }})+'" type="button" value="购买" onclick="button_clicked()">' );
+                    {% endif %}
+                    </script>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% csrf_token %}
+    </form>
+</body>
+</html>

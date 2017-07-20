@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" type="image/ico" href="/static/images/images/favicon.ico" />
+    <title>用户注册</title>
+    <link href="/static/css/styles.css" type="text/css" media="screen" rel="stylesheet" />
+    <link href="/static/css/jquery-ui-1.8.16.custom.css" rel="stylesheet">
+    <link href="/static/css/top.css" type="text/css" media="screen" rel="stylesheet" />
+    <script src="/static/js/jquery-1.6.2.min.js"></script>
+    <script src="/static/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.keyboard.extension-typing.js"></script>
+    <link type="text/css" href="/static/css/keyboard.css" rel="stylesheet" />
+    <script type="text/javascript" src="/static/js/jquery.keyboard.js"></script>
+
+
+
+
+</head>
+<body id="login">
+    <div id="wrappertop">
+        <div id="top-nav" class="navbar-fixed-top navbar-inverse">
+        <ul class="nav navbar-nav" style="float:left; margin-left: auto">
+            <li class="dropdown">
+                    {% if request.user.is_authenticated and request.user.activation %}
+                        <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="">
+                        <strong style="color: #1f1f1f">欢迎， {{ request.user.username }}</strong></a>
+                    {% elif request.user.is_authenticated %}
+                        <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="">
+                        <strong style="color: #1f1f1f">欢迎， {{ request.user.username }}（未验证）</strong></a>
+                    {% else %}
+                        <a href="/login/"><span class="hide-sm" style="color: #1f1f1f">登录</span></a></ul>
+                        <ul class="nav navbar-nav" style="float:left; margin-left: auto">
+                        <li class="dropdown"><a href="/register/"><span class="hide-sm" style="color: #1f1f1f">注册</span></a>
+                    {% endif %}
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" style="float:right; margin-right: auto">
+            <li class="dropdown">
+                {% if request.user.is_authenticated%}
+                <a href="/logout/">
+                    <i class="show-sm fa fa-sign-out"></i>
+                    <span class="hide-sm" style="color: #1f1f1f">注销</span>
+                </a>
+                {% endif %}
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" style="float:right; margin-right: auto">
+            <li class="dropdown">
+                {% if request.user.is_authenticated%}
+                <a href="/home/">
+                    <i class="show-sm fa fa-sign-out"></i>
+                    <span class="hide-sm" style="color: #1f1f1f">个人主页</span>
+                </a>
+                {% endif %}
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" style="float:right; margin-right: auto">
+            <li class="dropdown">
+                <a href="/goods/">
+                    <i class="show-sm fa fa-sign-out"></i>
+                    <span class="hide-sm" style="color: #1f1f1f">商品信息</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    </div>
+    <div id="wrapper">
+        <div id="content">
+            <div id="header">
+                <h1>
+                    <a href="">
+                       <!--����Logo <img src="logo.png"   height="50"  width="100"  alt="logo">--></a></h1>
+            </div>
+            <div id="darkbanner" class="banner320">
+                <h2>
+                    新用户注册</h2>
+            </div>
+            <div id="darkbannerwrap">
+            </div>
+            <form name="form1" method="post" action={% url 'register' %}>
+            <fieldset class="form">
+                <div>
+                    <label class="loginlabel" for="user_name">
+                        邮箱:</label>
+                    <input class="logininput ui-keyboard-input ui-widget-content ui-corner-all" name="email"
+                        id="user_name" type="text" {% if register_form.email.value != None%}value="{{ register_form.email.value }}"{% endif %} />
+                </div>
+                <div>
+                    <label class="loginlabel" for="user_password">
+                        密码:</label>
+                    <span>
+                        <input class="logininput ui-keyboard-input ui-widget-content ui-corner-all"   name="password" id="user_password" type="password" />
+                    </span>
+                </div>
+                <div>
+                    <label class="loginlabel" for="user_password">
+                        推荐码:</label>
+                    <span>
+                        <input class="logininput ui-keyboard-input ui-widget-content ui-corner-all"   name="referee" id="referee" type="text" placeholder="可不填"/>
+                    </span>
+                </div>
+                <div class="verify">
+                    <label class="loginlabel" for="user_password">
+                        验证码:</label>
+                    {{ register_form.capcha }}
+                </div>
+                <input class="btn btn-green" id="loginbtn" type="submit" value="注册" >
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+{#                <ul id="forgottenpassword">#}
+{#                    <li class="boldtext">|</li>#}
+{#                    &nbsp;&nbsp;&nbsp;#}
+                    <a href="/login/">现在登录</a>
+{#                </ul>#}
+                <div class="error" id="jsLoginTips">
+                    {% if register_form.errors.password %}密码应非纯数字且长度大于6位！{% elif register_form.errors.email %}邮箱不合法！{% elif register_form.errors.capcha %}验证码不正确！{% endif %}{{ msg }}
+                </div>
+            </fieldset>
+            {% csrf_token %}
+            </form>
+        </div>
+    </div>
+    <div id="wrapperbottom_branding">
+        <div id="wrapperbottom_branding_text"></div>
+    </div>
+{#    <script type="text/javascript">#}
+{#        $(document).ready(function() {#}
+{#            $('#user_password').keyboard({#}
+{#                openOn: null,#}
+{#                stayOpen: true,#}
+{#                layout: 'qwerty'#}
+{#            }).addTyping();#}
+{#            $('#passwd').click(function() {#}
+{#                $('#user_password').getkeyboard().reveal();#}
+{#            })#}
+{##}
+{#            $(".logininput").blur(function() {#}
+{#                if ($(this).val() == "") {#}
+{#                    $(this).css("border-color", "red");#}
+{#                                    }#}
+{#                else#}
+{#                    $(this).css("border-color", "#D9D6C4");#}
+{#            })#}
+{##}
+{#            $("#loginbtn").click(function() {#}
+{#                var k = 0;#}
+{#                var ajaxhtml = "";#}
+{#                $(".logininput").each(function(i, obj) {#}
+{#                    if ($(obj).val().trim() == "") {#}
+{#                        k++;#}
+{#                        $(this).css("border-color", "red");#}
+{#                        $(this).focus();#}
+{#                        return false;#}
+{#                    }#}
+{#                });#}
+{#                if (k != 0) return;#}
+{#                ajaxhtml = $("#loginbtn").html();#}
+{#                $("#loginbtn").html("Loading....  <img src='loading.gif' alt='Announcement' /> ");#}
+{#                $("#loginbtn").attr("disabled", "disabled");#}
+{##}
+{#            })#}
+{#        });#}
+{##}
+{#    </script>#}
+</body>
