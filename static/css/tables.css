@@ -1,0 +1,98 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #333333;
+}
+*, *::before, *::after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+td{
+    border-top: 0;
+    white-space: nowrap;
+    border: 1px solid #dddddd;
+    vertical-align: bottom;
+    padding: 8px;
+    line-height: 1.428571429;
+    text-overflow: ellipsis;
+    background-color: #FAFAFA;
+    background-image: linear-gradient(to bottom, white, #F2F2F2);
+    background-repeat: repeat-x;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+    border-bottom-width: 1px !important;
+    text-align: left;
+    box-sizing: border-box;
+}
+a {
+    cursor: pointer;
+    color: #428bca;
+    text-decoration: none;
+    background: transparent;
+}
+ul, ol {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.table-responsive{
+	width: 100%;
+	margin-bottom: 15px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	border: 1px solid #dddddd;
+}
+.table-bordered {
+    border: 0;
+}
+.table {
+     margin-bottom: 0;
+     width: 100%;
+     background-color: transparent;
+     border-collapse: collapse;
+     border-spacing: 0;
+}
+.dropdown {
+    position: relative;
+}
+.pull-left {
+    float: left !important;
+}
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    list-style: none;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+}
+.dropdown-menu > li > a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #333333;
+    white-space: nowrap;
+}
+.fa {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
