@@ -17,7 +17,7 @@ class OrdersView(View):
                 results.append({'id': order.id, 'goods': good.name, 'price': good.price,
                                 'real_price': order.real_price, 'create_time': order.create_time,
                                 'state': order.state, 'motorcycle_type': order.motorcycle_type,
-                                'license_plate': order.License_plate})
+                                'license_plate': order.License_plate, 'rebate_amount': order.actual_slaes_section})
             return render(request, "home.html", locals())
         else:
             return HttpResponseRedirect("/login/")
