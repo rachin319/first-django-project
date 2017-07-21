@@ -19,7 +19,7 @@ from django.views.generic import TemplateView
 import xadmin
 
 from users.views import LoginView, RegisterView, ActiveUserView, LogoutView, RefereeView, ForgetPwdView, ResetView, ModifyPwdView
-from goods.views import GoodsView
+from goods.views import GoodsView, SuccessView
 from orders.views import OrdersView
 
 urlpatterns = [
@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^register/', RegisterView.as_view(), name='register'),
     url(r'^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name='user_active'),
     url(r'^goods/', GoodsView.as_view(), name='goods'),
+    url(r'^success/', SuccessView.as_view(), name='success'),
     url(r'^home/', OrdersView.as_view(), name='home'),
     url(r'^referee/', RefereeView.as_view(), name='referee'),
     url(r'^forget/', ForgetPwdView.as_view(), name='forget'),
