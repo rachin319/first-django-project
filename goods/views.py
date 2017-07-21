@@ -10,6 +10,7 @@ from utils.email_send import send_register_email
 
 # Create your views here.
 class GoodsView(View):
+    order_id = 0
     def get(self, request):
         goods_items = Goods.objects.all()
         return render(request, "goods.html", locals())
@@ -17,9 +18,13 @@ class GoodsView(View):
     def post(self, request):
         if self.request.user.is_authenticated() and self.request.user.activation:
             order = Order()
-            order.id = generate_order_id(16)
+            #order.id = generate_order_id(16)
+            self.order_id += 1
+            order.id = str(self.order_id)
             while Order.objects.filter(id=order.id):
-                order.id = generate_order_id(16)
+                self.order_id += 1
+                order.id = str(self.order_id)
+                #order.id = generate_order_id(16)
             order.user = self.request.user
             for item in self.request.POST:
                 for i in range(8):
@@ -30,12 +35,23 @@ class GoodsView(View):
             order.state = 'pending'
             order.save()
             goods_items = Goods.objects.all()
-            return render(request, "goods.html", locals())
+            return render(request, "success.html", locals())
         elif self.request.user.is_authenticated():
             send_register_email(self.request.user.username, "register")
             return render(request, "goods.html", locals())
         else:
             return HttpResponseRedirect("/login/")
+
+
+class SuccessView(View):
+    def get(self, request):
+        if self.request.user.is_authenticated():
+            return render(request, "success.html", locals())
+        else:
+            return HttpResponseRedirect("/login/")
+
+    def post(self):
+        pass
 
 
 def generate_order_id(randomlength):
