@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Success</title>
+    <link href="/static/css/tables.css" type="text/css" media="screen" rel="stylesheet" />
+    <link href="/static/css/top.css" type="text/css" media="screen" rel="stylesheet" />
+    <script type="text/javascript">
+        function back() {
+            window.history.back(-1)
+        }
+    </script>
+</head>
+<body>
+
+
+    <form id="form1" method="post" action={% url 'referee' %}>
+    <div id="top-nav" class="navbar navbar-fixed-top navbar-inverse">
+        <ul class="nav navbar-nav" style="float:left; margin-left: auto">
+            <li class="dropdown">
+                    {% if request.user.is_authenticated and request.user.activation %}
+                        <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="">
+                        <strong>欢迎， {{ request.user.username }}</strong></a>
+                    {% elif request.user.is_authenticated %}
+                        <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="">
+                        <strong>欢迎， {{ request.user.username }}（未验证）</strong></a>
+                    {% else %}
+                        <a href="/login/"><span class="hide-sm">登录</span></a></ul>
+                        <ul class="nav navbar-nav" style="float:left; margin-left: auto">
+                        <li class="dropdown"><a href="/register/"><span class="hide-sm">注册</span></a>
+                    {% endif %}
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" style="float:right; margin-right: auto">
+            <li class="dropdown">
+                {% if request.user.is_authenticated%}
+                <a href="/logout/">
+                    <i class="show-sm fa fa-sign-out"></i>
+                    <span class="hide-sm">注销</span>
+                </a>
+                {% endif %}
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" style="float:right; margin-right: auto">
+            <li class="dropdown">
+                {% if request.user.is_authenticated%}
+                <a href="/home/">
+                    <i class="show-sm fa fa-sign-out"></i>
+                    <span class="hide-sm" >个人主页</span>
+                </a>
+                {% endif %}
+            </li>
+        </ul>
+        <ul class="nav navbar-nav" style="float:right; margin-right: auto">
+            <li class="dropdown">
+                <a href="/goods/">
+                    <i class="show-sm fa fa-sign-out"></i>
+                    <span class="hide-sm">商品信息</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div id="top-nav" class="navbar navbar-fixed-top">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                    <strong style='font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace; font-size: larger; margin-left: 45%'></strong><br>
+            </li>
+            <li class="dropdown" style="margin-left: -75%">
+                    <strong style='font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace; font-size: larger; margin-left: 45%'>订单已生成，请联系客服进行支付！</strong><br>
+            </li>
+            <li class="dropdown">
+                <center><input type="button" value="返回" onclick="return back()"></center>
+            </li>
+            <br>
+        </ul>
+    </div>
+    {% csrf_token %}
+    </form>
+</body>
+</html>
