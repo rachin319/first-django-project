@@ -18,11 +18,12 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 import xadmin
 
-from users.views import LoginView, RegisterView, ActiveUserView, LogoutView, RefereeView, ForgetPwdView, ResetView, ModifyPwdView
+from users.views import LoginView, RegisterView, ActiveUserView, LogoutView, RefereeView, ForgetPwdView, ResetView, ModifyPwdView, IndexView
 from goods.views import GoodsView, SuccessView
 from orders.views import OrdersView
 
 urlpatterns = [
+    url(r'^$',IndexView.as_view(), name='index'),
     url(r'^admin/', xadmin.site.urls),
     url(r'^login/', LoginView.as_view(), name='login'),
     url(r'^logout/', LogoutView.as_view(), name='logout'),
@@ -37,3 +38,4 @@ urlpatterns = [
     url(r'^reset/(?P<active_code>.*)/$', ResetView.as_view(), name='reset_pwd'),
     url(r'^reset/$', ModifyPwdView.as_view(), name='reset'),
 ]
+
