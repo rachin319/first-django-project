@@ -189,3 +189,26 @@ class ModifyPwdView(View):
         else:
             email = request.POST.get("username", "")
             return render(request, "reset.html", {"username": email, "modify_form": modify_form})
+
+        
+class IndexView(View):
+    def get(self, request):
+        return render(request, "login.html")
+
+    def post(self, request):
+        login_form = LoginForm(request.POST)
+        if login_form.is_valid():
+            username = request.POST.get("username", "")
+            password = request.POST.get("password", "")
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                goods_items = Goods.objects.all()
+                render(request, "goods.html", locals())
+                return HttpResponseRedirect("/goods/")
+            else:
+                return render(request, "login.html", {"msg": "用户名或密码错误！"})
+        else:
+            return render(request, "login.html", {"login_form": login_form })
+
+
