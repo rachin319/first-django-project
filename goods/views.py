@@ -11,6 +11,7 @@ from utils.email_send import send_register_email
 # Create your views here.
 class GoodsView(View):
     order_id = 0
+
     def get(self, request):
         goods_items = Goods.objects.all()
         return render(request, "goods.html", locals())
@@ -30,7 +31,8 @@ class GoodsView(View):
                 for i in range(8):
                     if Goods.objects.filter(id='0'*i+str(item)):
                         order.goods = Goods.objects.get(id='0'*i+str(item))
-                        order.real_price = order.goods.price
+                        if order.goods.sale_percentage is not None:
+                            order.sale_percentage = order.goods.sale_percentage
                         break
             order.state = 'pending'
             order.save()

@@ -5,8 +5,8 @@ from .models import Goods
 
 
 class GoodsAdmin(object):
-    list_display = ['id', 'name', 'price']
-    search_fields = ['id', 'name', 'price']
-    list_filter = ['id', 'name', 'price']
+    list_display = ['id', 'name', 'sale_percentage']
+    search_fields = ['id', 'name', 'sale_percentage']
+    list_filter = ['id', 'name', 'sale_percentage']
 
 xadmin.site.register(Goods, GoodsAdmin)
