@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'orders',
     'captcha',
     'utils',
+    'credits',
 ]
 
 AUTH_USER_MODEL = "users.UserProfile"
