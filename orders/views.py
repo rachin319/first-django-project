@@ -15,9 +15,13 @@ class OrdersView(View):
             for order in order_list:
                 good = Goods.objects.get(id=str(order.goods_id))
                 results.append({'id': order.id, 'goods': good.name, 'real_price': order.real_price,
-                                'sale_percentage': good.sale_percentage,'create_time': order.create_time,
+                                'sale_percentage': order.sale_percentage if order.sale_percentage is not None
+                                else good.sale_percentage, 'create_time': order.create_time,
                                 'state': order.state, 'motorcycle_type': order.motorcycle_type,
-                                'license_plate': order.License_plate, 'rebate_amount': order.actual_slaes_section})
+                                'license_plate': order.License_plate, 'rebate_amount': order.rebate_amount,
+                                'insurance_amount': order.insurance_amount, 'vehicle_and_vessel_tax':
+                                    order.vehicle_and_vessel_tax,
+                                'compulsory_insurance_amount': order.compulsory_insurance_amount})
             return render(request, "home.html", locals())
         else:
             return HttpResponseRedirect("/login/")

@@ -31,11 +31,18 @@ class Order(models.Model):
     def real_price(self):
         if Decimal.to_integral(self.insurance_amount)==0:
             return None
-        return Decimal.to_integral(self.insurance_amount + self.compulsory_insurance_amount + self.vehicle_and_vessel_tax\
-                - self.rebate_amount() -self.compulsory_rebate_amount())
+        return Decimal.to_integral(self.total_price()-self.rebate_amount())
     real_price.is_column = True
     real_price.allow_tags = True
     real_price.short_description = u'成交价格'
+
+    def total_price(self):
+        if Decimal.to_integral(self.insurance_amount)==0:
+            return None
+        return Decimal.to_integral(self.insurance_amount + self.compulsory_insurance_amount + self.vehicle_and_vessel_tax)
+    total_price.is_column = True
+    total_price.allow_tags = True
+    total_price.short_description = u'总成交价格'
 
     def rebate_amount(self):
         return Decimal.to_integral(self.insurance_amount*self.sale_percentage)
@@ -50,9 +57,9 @@ class Order(models.Model):
     compulsory_rebate_amount.short_description = u'交强险返点金额'
 
     def incoming_slaes_section(self):
-        if self.real_price() is None:
+        if self.total_price() is None:
             return 0
-        return Decimal.to_integral(self.real_price()-self.actual_slaes_section())
+        return Decimal.to_integral(self.total_price()-self.rebate_amount())
     incoming_slaes_section.is_column = True
     incoming_slaes_section.allow_tags = True
     incoming_slaes_section.short_description = u'待收业务员款'
@@ -71,20 +78,19 @@ class Order(models.Model):
     outstanding_corporation.short_description = u'待收总公司款'
 
     def profit(self):
-        return Decimal.to_integral(self.outstanding_corporation() - self.actual_slaes_section())
+        return self.outstanding_corporation() - self.rebate_amount()
     profit.is_column = True
     profit.allow_tags = True
     profit.short_description = u'利润'
 
     def advances(self):
-        return Decimal.to_integral(self.insurance_amount + self.compulsory_insurance_amount + self.vehicle_and_vessel_tax
-                                   - (self.incoming_slaes_section() if self.is_received else 0))
+        return self.rebate_amount() if self.is_received else self.total_price()
     advances.is_column = True
     advances.allow_tags = True
     advances.short_description = u'垫款'
 
     def cash_in_hand(self):
-        return self.incoming_slaes_section()
+        return self.incoming_slaes_section() if self.is_received else 0
     cash_in_hand.is_column = True
     cash_in_hand.allow_tags = True
     cash_in_hand.short_description = u'手头现金'
