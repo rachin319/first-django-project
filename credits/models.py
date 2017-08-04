@@ -16,8 +16,10 @@ class Credit(models.Model):
     return_date = models.DateField(verbose_name=u"还款日")
     def return_amount(self):
         amount = Decimal.from_float(0)
-        date_end = str(self.bill_date.year)+'-'+str(self.bill_date.month).zfill(2)+'-'+str(self.bill_date.day)
-        date_sta = str(self.bill_date.year)+'-'+str(self.bill_date.month-1).zfill(2)+'-'+str(self.bill_date.day)
+        date_end = self.bill_date - timedelta(days=1)
+        date_sta = datetime(self.bill_date.year, self.bill_date.month, self.bill_date.day) - timedelta(days=self.bill_date.day)
+        date_end = str(date_end.year)+'-'+str(date_end.month).zfill(2)+'-'+str(date_end.day)
+        date_sta = str(date_sta.year)+'-'+str(date_sta.month).zfill(2)+'-'+str(self.bill_date.day)
         for item in Credit.objects.filter(user=self.user, bank=self.bank, use_date__range=[date_sta, date_end]):
              amount += item.amount
         return amount
